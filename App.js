@@ -41,6 +41,7 @@ createAutoComplete({
     onMovieSelect(movie, document.querySelector('#right-summary'), 'right');
   }
 });
+
 let leftMovie;
 let rightMovie;
 const onMovieSelect = async (movie, summaryElement, side) => {
@@ -65,26 +66,45 @@ const onMovieSelect = async (movie, summaryElement, side) => {
 };
 
 const runComparison = () => {
-  
+  const leftSideStats = document.querySelectorAll(
+    '#left-summary .notification'
+  );
+  const rightSideStats = document.querySelectorAll(
+    '#right-summary .notification'
+  );
+
+  leftSideStats.forEach((leftStat, index) => {
+    const rightStat = rightSideStats[index];
+
+    const leftSideValue = leftStat.dataset.value;
+    const rightSideValue = rightStat.dataset.value;
+
+    if (rightSideValue > leftSideValue) {
+      leftStat.classList.remove('is-primary');
+      leftStat.classList.add('is-warning');
+    } else {
+      rightStat.classList.remove('is-primary');
+      rightStat.classList.add('is-warning');
+    }
+  });
 };
 
 const movieTemplate = movieDetail => {
-  const dollars = parseInt(movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, ''));
+  const dollars = parseInt(
+    movieDetail.BoxOffice.replace(/\$/g, '').replace(/,/g, '')
+  );
   const metascore = parseInt(movieDetail.Metascore);
   const imdbRating = parseFloat(movieDetail.imdbRating);
   const imdbVotes = parseInt(movieDetail.imdbVotes.replace(/,/g, ''));
-
-  
   const awards = movieDetail.Awards.split(' ').reduce((prev, word) => {
     const value = parseInt(word);
 
     if (isNaN(value)) {
       return prev;
     } else {
-      return prev + value
+      return prev + value;
     }
   }, 0);
-  console.log(awards);
 
   return `
     <article class="media">
@@ -101,6 +121,7 @@ const movieTemplate = movieDetail => {
         </div>
       </div>
     </article>
+
     <article data-value=${awards} class="notification is-primary">
       <p class="title">${movieDetail.Awards}</p>
       <p class="subtitle">Awards</p>

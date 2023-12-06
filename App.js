@@ -12,7 +12,7 @@ const autoCompleteConfig = {
   async fetchData(searchTerm) {
     const response = await axios.get('http://www.omdbapi.com/', {
       params: {
-        apikey: process.env.OMDB_APIKEY,
+        apikey: '330151ac',
         s: searchTerm
       }
     });

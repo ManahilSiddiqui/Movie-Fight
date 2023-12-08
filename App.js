@@ -10,12 +10,13 @@ const autoCompleteConfig = {
     return movie.Title;
   },
   async fetchData(searchTerm) {
-    const response = await axios.get('http://www.omdbapi.com/', {
+    const response = await axios.get('https://www.omdbapi.com/', {
       params: {
         apikey: '330151ac',
-        s: searchTerm
+        s: searchTerm // or i: movie.imdbID
       }
     });
+    
 
     if (response.data.Error) {
       return [];
@@ -46,11 +47,12 @@ let leftMovie;
 let rightMovie;
 const onMovieSelect = async (movie, summaryElement, side) => {
   const response = await axios.get('https://www.omdbapi.com/', {
-    params: {
-      apikey: '330151ac',
-      i: movie.imdbID
-    }
-  });
+  params: {
+    apikey: '330151ac',
+    s: searchTerm // or i: movie.imdbID
+  }
+});
+
 
   summaryElement.innerHTML = movieTemplate(response.data);
 
